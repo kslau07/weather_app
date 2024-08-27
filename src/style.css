@@ -1,3 +1,5 @@
-body {
-  color: red;
+.display {
+  height: 100px;
+  width: 100px;
+  background: red;
 }
