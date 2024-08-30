@@ -3,3 +3,8 @@
   width: 100px;
   background: red;
 }
+
+.logo {
+  width: 100px;
+  /* object-fit: cover; */
+}
