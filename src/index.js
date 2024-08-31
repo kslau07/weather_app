@@ -1,9 +1,10 @@
+import './reset.css';
 import './style.css';
 import Logo from './images/logo.png';
 
-const logo = document.querySelector('.logo');
-logo.src = Logo;
-logo.alt = 'Logo with a cloud, sun, and rain.';
+const logoImage = document.querySelector('.logo-image');
+logoImage.src = Logo;
+logoImage.alt = 'Logo with a cloud, sun, and rain.';
 
 // TODO: Add error checking
 // Try one of these solutions: https://stackoverflow.com/questions/54163952/async-await-in-fetch-how-to-handle-errors
