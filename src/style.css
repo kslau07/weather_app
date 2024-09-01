@@ -116,6 +116,43 @@ header {
   outline: 3px dashed var(--color-accent2);
 }
 
+.select-days-outer-wrapper {
+  display: grid;
+  place-items: center;
+}
+
+.select-days-inner-wrapper {
+  margin-block: var(--space-lg);
+  display: grid;
+  justify-content: center;
+  grid-auto-flow: column;
+  padding: var(--space-xs);
+  background: var(--color-accent1);
+  width: max-content;
+  box-shadow: inset 3px 3px 3px black;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+}
+
+.day-button {
+  background: var(--color-accent1);
+  border: none;
+  cursor: pointer;
+  color: white;
+  margin-inline: var(--space-sm);
+}
+
+.day-button.active {
+  background: var(--color-accent3);
+  padding-inline: var(--space-sm);
+  padding-block: var(--space-xxxs);
+  border-radius: 5px;
+  box-shadow: 3px 3px 3px black;
+  color: black;
+}
+
 footer {
   border: 2px dashed lightgray;
 }
