@@ -9,6 +9,9 @@ logoImage.alt = 'Logo with a cloud, sun, and rain.';
 // TODO: Add error checking
 // Try one of these solutions: https://stackoverflow.com/questions/54163952/async-await-in-fetch-how-to-handle-errors
 
+// TODO: Fetch city's data and store it in a variable, which we can access without fetching again.
+let weatherJson;
+
 async function fetchWeather(city) {
   // "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/london?key=4JADYSQFJBLV5TNHBEPMXVB9Y";
   const request = new Request(
@@ -30,13 +33,13 @@ async function fetchWeather(city) {
 
 const inputCity = document.getElementById('input-city');
 const buttonCity = document.getElementById('button-city');
-const display = document.querySelector('.display');
+const displayCityName = document.querySelector('.display-city-name');
 
 buttonCity.addEventListener('click', (e) => {
   e.preventDefault();
 
   const city = inputCity.value;
-  fetchWeather(city).then((data) => {
+  fetchWeather(city).then((json) => {
     const {
       currentConditions: {
         conditions: cond,
@@ -45,11 +48,21 @@ buttonCity.addEventListener('click', (e) => {
         precip,
         precipprob,
       },
-    } = data;
+    } = json;
     // console.log(cond, temp, humidity, precip, precipprob);
     // display.textContent = `${cond} ${temp} ${humidity} ${precip} ${precipprob}}`;
-    console.log(data);
+    // console.log(data);
     // console.log(data.currentConditions);
     // display.textContent = json;
+    weatherJson = json;
+  });
+});
+
+const timeFrameButtonsIterable = document.querySelectorAll('.timeframe-button');
+const timeFrameButtons = [...timeFrameButtonsIterable];
+timeFrameButtons.forEach((button) => {
+  button.addEventListener('click', function () {
+    console.log(this);
+    console.log(weatherJson);
   });
 });

@@ -69,7 +69,7 @@ header {
 
 .logo-name {
   font-family: var(--logotype);
-  font-size: var(--text-xxl);
+  font-size: 2.5rem;
   font-style: italic;
   font-weight: 700;
   display: inline-block;
@@ -82,9 +82,11 @@ header {
 }
 
 .form {
-  display: grid;
-  grid-auto-flow: column;
+  display: flex;
   gap: var(--space-sm);
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
 }
 
 #input-city {
@@ -101,11 +103,11 @@ header {
 }
 
 #button-city {
+  min-height: 3rem;
   color: var(--color-light1);
   letter-spacing: 1px;
   cursor: pointer;
   background: var(--color-accent1);
-  /* background-color: #2ea44f; */
   border: 1px solid rgba(27, 31, 35, 0.15);
   border-radius: var(--border-radius-sm);
   box-shadow: rgba(27, 31, 35, 0.1) 0 1px 0;
@@ -116,12 +118,12 @@ header {
   outline: 3px dashed var(--color-accent2);
 }
 
-.select-days-outer-wrapper {
+.timeframe-buttons-wrapper {
   display: grid;
   place-items: center;
 }
 
-.select-days-inner-wrapper {
+.timeframe-buttons {
   margin-block: var(--space-lg);
   display: grid;
   justify-content: center;
@@ -136,7 +138,7 @@ header {
   border-bottom-right-radius: 15px;
 }
 
-.day-button {
+.timeframe-button {
   background: var(--color-accent1);
   border: none;
   cursor: pointer;
@@ -144,7 +146,7 @@ header {
   margin-inline: var(--space-sm);
 }
 
-.day-button.active {
+.timeframe-button.active {
   background: var(--color-accent3);
   padding-inline: var(--space-sm);
   padding-block: var(--space-xxxs);
@@ -157,7 +159,7 @@ footer {
   border: 2px dashed lightgray;
 }
 
-.display {
+.display-city-name {
   height: 100px;
   width: 100px;
   background: red;
