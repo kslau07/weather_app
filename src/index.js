@@ -13,7 +13,6 @@ logoImage.alt = 'Logo with a cloud, sun, and rain.';
 let weatherJson;
 
 async function fetchWeather(city) {
-  // "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/london?key=4JADYSQFJBLV5TNHBEPMXVB9Y";
   const request = new Request(
     `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${city}?key=4JADYSQFJBLV5TNHBEPMXVB9Y`,
   );
@@ -39,30 +38,44 @@ buttonCity.addEventListener('click', (e) => {
   e.preventDefault();
 
   const city = inputCity.value;
-  fetchWeather(city).then((json) => {
-    const {
-      currentConditions: {
-        conditions: cond,
-        temp,
-        humidity,
-        precip,
-        precipprob,
-      },
-    } = json;
-    // console.log(cond, temp, humidity, precip, precipprob);
-    // display.textContent = `${cond} ${temp} ${humidity} ${precip} ${precipprob}}`;
-    // console.log(data);
-    // console.log(data.currentConditions);
-    // display.textContent = json;
-    weatherJson = json;
-  });
+  fetchWeather(city)
+    .then((json) => (weatherJson = json))
+    .then((json) => (displayCityName.textContent = json.resolvedAddress));
 });
+
+const updateTimeframeButtons = (forecastPeriod) => {
+  const timeFrameButtonsIterable =
+    document.querySelectorAll('.timeframe-button');
+  const timeFrameButtons = [...timeFrameButtonsIterable];
+  timeFrameButtons.forEach((button) => {
+    button.classList.remove('active');
+  });
+
+  const button = document.querySelector(`.tf-${forecastPeriod}-button`);
+  button.classList.add('active');
+};
+
+const updateCardsWrapper = (forecastPeriod) => {
+  const cardsWrapper = document.querySelector('.cards-wrapper');
+  const template = document.querySelector(`.tf-${forecastPeriod}-template`);
+  const clone = template.content.cloneNode(true);
+
+  cardsWrapper.innerHTML = '';
+  cardsWrapper.appendChild(clone);
+};
+
+const updateDisplay = (timeframeButton) => {
+  const textContent = timeframeButton.textContent;
+  const pattern = /^\d+/; // Match from beginning of string, 1 or more digits
+  const forecastPeriod = textContent.match(pattern)[0];
+  updateTimeframeButtons(forecastPeriod);
+  updateCardsWrapper(forecastPeriod);
+};
 
 const timeFrameButtonsIterable = document.querySelectorAll('.timeframe-button');
 const timeFrameButtons = [...timeFrameButtonsIterable];
 timeFrameButtons.forEach((button) => {
   button.addEventListener('click', function () {
-    console.log(this);
-    console.log(weatherJson);
+    updateDisplay(this);
   });
 });
