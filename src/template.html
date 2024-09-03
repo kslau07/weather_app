@@ -38,17 +38,42 @@
           <div class="temp"></div>
           <div class="conditions"></div>
           <div class="high-low-wrapper">
-            <div class="high"></div>
-            <div class="low"></div>
+            <span class="high"></span>
+            <span class="low"></span>
           </div>
         </section>
         <section class="section-middle">
           <div class="description"></div>
+          <div class="hourly-forecast-wrapper">
+            <template class="one-hour-template">
+              <div class="one-hour-wrapper">
+                <div class="one-hour-label"></div>
+                <div class="one-hour-icon-wrapper">
+                  <div class="one-hour-icon"></div>
+                  <div class="one-hour-precipprob"></div>
+                </div>
+                <div class="one-hour-temp"></div>
+              </div>
+            </template>
+          </div>
         </section>
-        <section class="section-bottom"></section>
+        <section class="section-bottom">
+          <div class="extended-forecast-label"></div>
+          <div class="extended-forecast-wrapper">
+            <template class="one-day-template">
+              <div class="one-day-wrapper">
+                <div class="one-day-label"></div>
+                <div class="one-day-icon-wrapper">
+                  <div class="one-day-icon"></div>
+                  <div class="one-day-percentage"></div>
+                </div>
+                <div class="one-day-high"></div>
+                <div class="one-day-low"></div>
+              </div>
+            </template>
+          </div>
+        </section>
       </div>
-      <template class="hourly-template"> </template>
-      <template class="daily-template"></template>
     </main>
     <footer>footer goes here</footer>
   </body>
