@@ -14,7 +14,12 @@
     "type": "git",
     "url": "git+https://github.com/kslau07/weather_app.git"
   },
-  "keywords": ["weather", "app", "odin", "project"],
+  "keywords": [
+    "weather",
+    "app",
+    "odin",
+    "project"
+  ],
   "author": "Kwok Lau",
   "license": "ISC",
   "bugs": {

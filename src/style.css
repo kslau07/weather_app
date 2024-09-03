@@ -11,6 +11,7 @@ body {
     arial, sans-serif;
 
   font: 1rem var(--sans-serif);
+  font-weight: 400;
   color: var(--color-dark1);
 
   /* Font sizes */
@@ -48,6 +49,8 @@ body {
 
   /* Border radius */
   --border-radius-sm: 3px;
+
+  background-size: cover;
 }
 
 header {
@@ -118,46 +121,72 @@ header {
   outline: 3px dashed var(--color-accent2);
 }
 
-.timeframe-buttons-wrapper {
-  display: grid;
-  place-items: center;
-}
-
-.timeframe-buttons {
-  margin-block: var(--space-lg);
-  display: grid;
-  justify-content: center;
-  grid-auto-flow: column;
-  padding: var(--space-xs);
-  background: var(--color-accent1);
-  width: max-content;
-  box-shadow: inset 3px 3px 3px black;
-  border-top-left-radius: 15px;
-  border-top-right-radius: 15px;
-  border-bottom-left-radius: 15px;
-  border-bottom-right-radius: 15px;
-}
-
-.timeframe-button {
-  background: var(--color-accent1);
-  border: none;
-  cursor: pointer;
+.display {
+  outline: 3px dashed green;
   color: white;
-  margin-inline: var(--space-sm);
+
+  text-shadow: 2px 2px 3px black;
 }
 
-.timeframe-button.active {
-  background: var(--color-accent3);
-  padding-inline: var(--space-sm);
-  padding-block: var(--space-xxxs);
-  border-radius: 5px;
-  box-shadow: 3px 3px 3px black;
-  color: black;
+.section-top {
 }
 
-footer {
-  border: 2px dashed lightgray;
+.section-top.city {
+  font-size: var(--text-xxl);
 }
 
-.display-city-name {
+.section-top.temp {
+  font-size: var(--text-xxxxl);
+}
+
+.section-top.conditions {
+  font-size: var(--text-xxl);
+}
+
+.section-top.high {
+}
+
+.section-top.low {
+}
+
+.sunny,
+.clear-day,
+.clear-night,
+.wind {
+  background-image: url('./images/cloudy.jpg');
+}
+
+.rain,
+.rain-snow-showers-day,
+.rain-snow-showers-night,
+.rain-snow,
+.rain,
+.showers-day,
+.showers-night,
+.sleet {
+  background-image: url('./images/rainy.jpg');
+}
+
+.cloudy,
+.fog,
+.hail {
+  background-image: url('./images/cloudy.jpg');
+}
+
+.partly-cloudy-day,
+.partly-cloudy-night {
+  background-image: url('./images/partly-cloudy.jpg');
+}
+
+.snow-showers-day,
+.snow-showers-night,
+.snow {
+  background-image: url('./images/snow.jpg');
+}
+
+.thunder-rain,
+.thunder-showers-day,
+.thunder-showers-night,
+.thunder {
+  background-image: url('./images/thunder.jpg');
 }

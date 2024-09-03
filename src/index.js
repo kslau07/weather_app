@@ -1,6 +1,7 @@
 import './reset.css';
 import './style.css';
 import Logo from './images/logo.png';
+import Sunny from './images/sunny.jpg';
 
 const logoImage = document.querySelector('.logo-image');
 logoImage.src = Logo;
@@ -11,6 +12,11 @@ logoImage.alt = 'Logo with a cloud, sun, and rain.';
 
 // TODO: Fetch city's data and store it in a variable, which we can access without fetching again.
 let weatherJson;
+
+// Example json, saved locally
+import london from './london.json'; // FIXME: DELETE ME
+weatherJson = london; // FIXME: DELETE ME
+console.log(london); // FIXME: DELETE ME
 
 async function fetchWeather(city) {
   const request = new Request(
@@ -32,7 +38,6 @@ async function fetchWeather(city) {
 
 const inputCity = document.getElementById('input-city');
 const buttonCity = document.getElementById('button-city');
-const displayCityName = document.querySelector('.display-city-name');
 
 buttonCity.addEventListener('click', (e) => {
   e.preventDefault();
@@ -40,42 +45,37 @@ buttonCity.addEventListener('click', (e) => {
   const city = inputCity.value;
   fetchWeather(city)
     .then((json) => (weatherJson = json))
-    .then((json) => (displayCityName.textContent = json.resolvedAddress));
+    .then(() => updateDisplay());
 });
 
-const updateTimeframeButtons = (forecastPeriod) => {
-  const timeFrameButtonsIterable =
-    document.querySelectorAll('.timeframe-button');
-  const timeFrameButtons = [...timeFrameButtonsIterable];
-  timeFrameButtons.forEach((button) => {
-    button.classList.remove('active');
-  });
-
-  const button = document.querySelector(`.tf-${forecastPeriod}-button`);
-  button.classList.add('active');
+const capitalizeCity = (string) => {
+  const capitalized = string
+    .split(' ')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+  return capitalized;
 };
 
-const updateCardsWrapper = (forecastPeriod) => {
-  const cardsWrapper = document.querySelector('.cards-wrapper');
-  const template = document.querySelector(`.tf-${forecastPeriod}-template`);
-  const clone = template.content.cloneNode(true);
+const updateDisplay = () => {
+  console.log(weatherJson);
+  const display = document.querySelector('.display');
+  const current = weatherJson.days[0];
+  const city = display.querySelector('.city');
+  const temp = display.querySelector('.temp');
+  const high = display.querySelector('.high');
+  const low = display.querySelector('.low');
+  const conditions = display.querySelector('.conditions');
+  const description = display.querySelector('.description');
+  const capitalizedCity = capitalizeCity(weatherJson.address);
 
-  cardsWrapper.innerHTML = '';
-  cardsWrapper.appendChild(clone);
+  console.log(`icon name: ${current.icon}`);
+  document.body.className = `${current.icon}`;
+  city.textContent = capitalizedCity;
+  temp.textContent = current.temp;
+  conditions.textContent = current.conditions.split(', ')[0]; // Take first condition
+  high.textContent = current.tempmax;
+  low.textContent = current.tempmin;
+  description.textContent = current.description;
 };
 
-const updateDisplay = (timeframeButton) => {
-  const textContent = timeframeButton.textContent;
-  const pattern = /^\d+/; // Match from beginning of string, 1 or more digits
-  const forecastPeriod = textContent.match(pattern)[0];
-  updateTimeframeButtons(forecastPeriod);
-  updateCardsWrapper(forecastPeriod);
-};
-
-const timeFrameButtonsIterable = document.querySelectorAll('.timeframe-button');
-const timeFrameButtons = [...timeFrameButtonsIterable];
-timeFrameButtons.forEach((button) => {
-  button.addEventListener('click', function () {
-    updateDisplay(this);
-  });
-});
+setTimeout(updateDisplay, 1000); // FIXME: DELETE ME (development only)
