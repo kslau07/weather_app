@@ -168,11 +168,17 @@ header {
 }
 
 .hourly-forecast-wrapper {
-  height: 300px;
-  outline: 3px dashed white;
+  padding: var(--space-sm);
+  outline: 5px dotted blue;
 }
 
 .one-hour-wrapper {
+  outline: 3px dashed lime;
+}
+
+.one-hour-precipprob {
+  font-size: var(--text-xs);
+  color: gainsboro;
 }
 
 .description {
@@ -184,7 +190,7 @@ header {
 .clear-day,
 .clear-night,
 .wind {
-  background-image: url('./images/cloudy.jpg');
+  background-image: url('./images/sunny.jpg');
 }
 
 .rain,
