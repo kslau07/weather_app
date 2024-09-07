@@ -45,6 +45,7 @@ const extractData = (json) => {
         obj['current'] = {};
         obj['current']['conditions'] = json['days'][0]['conditions'];
         obj['current']['temp'] = json['days'][0]['temp'];
+        obj['current']['icon'] = json['days'][0]['icon'];
         obj['current']['tempmax'] = json['days'][0]['tempmax'];
         obj['current']['tempmin'] = json['days'][0]['tempmin'];
 
@@ -52,7 +53,7 @@ const extractData = (json) => {
 
         const currHour = new Date().getHours(); // Only extract hours that are after the current hour
         const totalHours = 10; // Extract data for each of next 10 hours only
-        obj['hourly'] = [];
+        obj['hours'] = [];
 
         let nthHour = 0;
         while (nthHour < totalHours) {
@@ -65,7 +66,7 @@ const extractData = (json) => {
           hour['precipprob'] =
             json.days[daysIndex].hours[hourIndex]['precipprob'];
           hour['temp'] = json.days[daysIndex].hours[hourIndex]['temp'];
-          obj['hourly'].push(hour);
+          obj['hours'].push(hour);
 
           nthHour = nthHour + 1;
         }
@@ -80,6 +81,7 @@ const extractData = (json) => {
           obj['days'][i]['precipprob'] = json['days'][i]['precipprob'];
           obj['days'][i]['tempmax'] = json['days'][i]['tempmax'];
           obj['days'][i]['tempmin'] = json['days'][i]['tempmin'];
+          obj['days'][i]['temp'] = json['days'][i]['temp'];
         });
       } else {
         // Top level keys: 'address', 'description', etc.
@@ -90,8 +92,8 @@ const extractData = (json) => {
     return obj;
   }, {});
 
+  console.log(relevantData); // FIXME: DELETE ME
   weatherData = relevantData;
-  console.log(relevantData);
 };
 
 buttonCity.addEventListener('click', (e) => {
@@ -101,12 +103,10 @@ buttonCity.addEventListener('click', (e) => {
   fetchWeather(city)
     .then((response) => response.json())
     .then((json) => {
-      // return (weatherJson = json);
       extractData(json);
     })
     .then(() => {
-      console.log(weatherData); // FIXME: DELETE ME
-      // updateDisplay();
+      updateDisplay();
     })
     .catch((error) => console.error(error));
 });
@@ -120,16 +120,16 @@ const capitalizeCity = (string) => {
 };
 
 const updateSectionTop = () => {
-  const current = weatherJson.days[0];
+  const { current } = weatherData;
   const sectionTop = document.querySelector('.section-top');
   const city = sectionTop.querySelector('.city');
   const temp = sectionTop.querySelector('.temp');
   const high = sectionTop.querySelector('.high');
   const low = sectionTop.querySelector('.low');
   const conditions = sectionTop.querySelector('.conditions');
-  const capitalizedCity = capitalizeCity(weatherJson.address);
+  const capitalizedCity = capitalizeCity(weatherData.address);
 
-  document.body.className = `${current.icon}`;
+  document.body.className = `${current.icon}`; // Update bg image
   city.textContent = capitalizedCity;
   temp.textContent = `${current.temp}°`;
   conditions.textContent = current.conditions.split(', ')[0]; // Take first condition
@@ -137,7 +137,7 @@ const updateSectionTop = () => {
   low.textContent = `L: ${current.tempmin}°`;
 };
 
-const oneHourIcon = (iconName) => {
+const getIconMarkup = (iconName) => {
   const sunnyArr = ['sunny', 'clear-day', 'clear-night', 'wind'];
   const rainyArr = [
     'rain',
@@ -177,36 +177,106 @@ const oneHourIcon = (iconName) => {
   }
 };
 
-const updateSectionMiddle = () => {
-  const XXXXXX = weatherJson.days[9];
-  const sectionMiddle = document.querySelector('.section-middle');
-  const description = sectionMiddle.querySelector('.description');
-  description.textContent = XXXXXX.description;
+function getDayName(dateStr, locale) {
+  var date = new Date(dateStr);
+  return date.toLocaleDateString(locale, { weekday: 'short' });
+}
 
-  const hourlyForecastWrapper = sectionMiddle.querySelector(
-    '.hourly-forecast-wrapper',
-  );
-  const oneHourTemplate = sectionMiddle.querySelector('.one-hour-template');
-  const clone = oneHourTemplate.content.cloneNode(true).children[0];
+function getTimeSimple(timeStr, locale) {
+  // Time example is unix epoch: '1970-01-01T00:00:00Z'
+  const timeString12hr = new Date(
+    '1970-01-01T' + timeStr + 'Z',
+  ).toLocaleTimeString('en-US', {
+    timeZone: 'UTC',
+    hour12: true,
+    hour: 'numeric',
+    minute: 'numeric',
+  });
+
+  const hour = timeString12hr.slice(0, -6);
+  const period = timeString12hr.slice(-2);
+  return String.prototype.concat(hour, period);
+}
+
+const populateHourClone = (clone, hoursIdx) => {
+  const json = weatherData;
   const label = clone.querySelector('.one-hour-label');
   const icon = clone.querySelector('.one-hour-icon');
   const precipprob = clone.querySelector('.one-hour-precipprob');
   const temp = clone.querySelector('.one-hour-temp');
 
-  label.textContent = 'Now';
-  const iconHtml = oneHourIcon(XXXXXX.icon);
+  // hours[0].datetime
+  const timeStr = json.hours[hoursIdx].datetime;
+  const time = hoursIdx === 0 ? 'Now' : getTimeSimple(timeStr, 'en-US');
+  label.textContent = time;
+  const iconHtml = getIconMarkup(json.days[hoursIdx].icon);
   icon.innerHTML = iconHtml;
-  precipprob.textContent = `${Math.round(XXXXXX.precipprob)}%`;
-  temp.textContent = `${Math.round(XXXXXX.temp)}°`;
-
-  hourlyForecastWrapper.appendChild(clone);
+  precipprob.textContent = `${Math.round(json.days[hoursIdx].precipprob)}%`;
+  temp.textContent = `${Math.round(json.days[hoursIdx].temp)}°`;
+  return clone;
 };
 
-const updateSectionBottom = () => {};
+const populateDayClone = (clone, daysIdx) => {
+  const json = weatherData;
+  const targetDay = json.days[daysIdx];
+  const label = clone.querySelector('.one-day-label');
+  const icon = clone.querySelector('.one-day-icon');
+  const precipprob = clone.querySelector('.one-day-precipprob');
+  const high = clone.querySelector('.one-day-high');
+  const low = clone.querySelector('.one-day-low');
+
+  const date = targetDay.datetime;
+  const dayName = daysIdx === 0 ? 'Now' : getDayName(date, 'en-US');
+  label.textContent = dayName;
+  const iconHtml = getIconMarkup(targetDay.icon);
+  icon.innerHTML = iconHtml;
+  precipprob.textContent = `${Math.round(targetDay.precipprob)}%`;
+  high.textContent = `High: ${Math.round(targetDay.tempmax)}°`;
+  low.textContent = `Low: ${Math.round(targetDay.tempmin)}°`;
+  return clone;
+};
+
+const updateSectionMiddle = () => {
+  const json = weatherData;
+  const sectionMiddle = document.querySelector('.section-middle');
+  const description = sectionMiddle.querySelector('.description');
+  description.textContent = json.description;
+
+  const hourlyForecastWrapper = sectionMiddle.querySelector(
+    '.hourly-forecast-wrapper',
+  );
+  hourlyForecastWrapper.innerHTML = '';
+
+  json.hours.forEach((item, hoursIdx) => {
+    const oneHourTemplate = sectionMiddle.querySelector('.one-hour-template');
+    const clone = oneHourTemplate.content.cloneNode(true).children[0];
+    const populatedClone = populateHourClone(clone, hoursIdx);
+    hourlyForecastWrapper.appendChild(populatedClone);
+  });
+};
+
+const updateSectionBottom = () => {
+  const json = weatherData;
+  const sectionBottom = document.querySelector('.section-bottom');
+  const label = sectionBottom.querySelector('.extended-forecast-label');
+
+  const extendedForecastWrapper = sectionBottom.querySelector(
+    '.extended-forecast-wrapper',
+  );
+  extendedForecastWrapper.innerHTML = '';
+
+  json.days.forEach((item, daysIdx) => {
+    const oneDayTemplate = sectionBottom.querySelector('.one-day-template');
+    const clone = oneDayTemplate.content.cloneNode(true).children[0];
+    const populatedClone = populateDayClone(clone, daysIdx);
+    extendedForecastWrapper.appendChild(populatedClone);
+  });
+};
 
 const updateDisplay = () => {
-  // updateSectionTop();
-  // updateSectionMiddle();
+  updateSectionTop();
+  updateSectionMiddle();
+  updateSectionBottom();
 };
 
 // setTimeout(updateDisplay, 500); // FIXME: DELETE ME (development only)

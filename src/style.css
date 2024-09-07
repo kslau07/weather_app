@@ -165,15 +165,25 @@ header {
 .section-middle {
   border-radius: var(--border-radius-lg);
   backdrop-filter: blur(10px) brightness(90%);
+  margin-bottom: var(--space-xxxxl);
+}
+
+.description {
+  padding: var(--space-sm);
+  border-bottom: 1px solid hsla(0, 0%, 100%, 25%);
 }
 
 .hourly-forecast-wrapper {
   padding: var(--space-sm);
-  outline: 5px dotted blue;
+  display: grid;
+  grid-auto-flow: column;
 }
 
 .one-hour-wrapper {
-  outline: 3px dashed lime;
+  width: 55px;
+  display: grid;
+  justify-content: center;
+  /* outline: 3px dashed lime; */
 }
 
 .one-hour-precipprob {
@@ -181,8 +191,25 @@ header {
   color: gainsboro;
 }
 
-.description {
+.section-bottom {
+  border-radius: var(--border-radius-lg);
+  backdrop-filter: blur(10px) brightness(90%);
+}
+
+.extended-forecast-label {
   padding: var(--space-sm);
+  border-bottom: 1px solid hsla(0, 0%, 100%, 25%);
+}
+
+.extended-forecast-wrapper {
+  display: grid;
+  grid-auto-flow: row;
+  padding: var(--space-sm);
+}
+
+.one-day-wrapper {
+  display: grid;
+  grid-auto-flow: column;
   border-bottom: 1px solid hsla(0, 0%, 100%, 25%);
 }
 
