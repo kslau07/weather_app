@@ -32,6 +32,7 @@ const inputCity = document.getElementById('input-city');
 const buttonCity = document.getElementById('button-city');
 
 let weatherData;
+
 const extractData = (json) => {
   const keys = Object.keys(json);
 
@@ -226,7 +227,7 @@ const populateDayClone = (clone, daysIdx) => {
   const low = clone.querySelector('.one-day-low');
 
   const date = targetDay.datetime;
-  const dayName = daysIdx === 0 ? 'Now' : getDayName(date, 'en-US');
+  const dayName = daysIdx === 0 ? 'Today' : getDayName(date, 'en-US');
   label.textContent = dayName;
   const iconHtml = getIconMarkup(targetDay.icon);
   icon.innerHTML = iconHtml;
@@ -279,4 +280,7 @@ const updateDisplay = () => {
   updateSectionBottom();
 };
 
-// setTimeout(updateDisplay, 500); // FIXME: DELETE ME (development only)
+// FIXME: DELETE ME, test data, development only
+// import Seattle from './seattle.json'; // delete me
+// extractData(Seattle); // delete me
+// setTimeout(updateDisplay, 250); // delete me

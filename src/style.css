@@ -52,6 +52,7 @@ body {
   --border-radius-lg: 9px;
 
   background-size: cover;
+  margin: var(--space-sm);
 }
 
 header {
@@ -67,20 +68,21 @@ header {
 
 .logo-image {
   width: 48px;
-  /* object-fit: cover; */
 }
 
 .logo-name {
   font-family: var(--logotype);
-  font-size: 2.5rem;
+  font-size: var(--text-xxxl);
   font-style: italic;
   font-weight: 700;
   display: inline-block;
 }
 
 .main {
-  display: grid;
-  justify-content: center;
+  /* display: grid; */
+  /* justify-content: center; */
+  max-width: 600px;
+  margin: 0 auto;
 }
 
 .form {
@@ -165,7 +167,7 @@ header {
 .section-middle {
   border-radius: var(--border-radius-lg);
   backdrop-filter: blur(10px) brightness(90%);
-  margin-bottom: var(--space-xxxxl);
+  margin-bottom: var(--space-xxxl);
 }
 
 .description {
@@ -174,16 +176,18 @@ header {
 }
 
 .hourly-forecast-wrapper {
-  padding: var(--space-sm);
+  padding: var(--space-xs);
   display: grid;
-  grid-auto-flow: column;
+  gap: var(--space-xs);
+  grid-template-columns: repeat(auto-fit, minmax(45px, 1fr));
 }
 
 .one-hour-wrapper {
-  width: 55px;
-  display: grid;
-  justify-content: center;
-  /* outline: 3px dashed lime; */
+}
+
+.one-hour-wrapper {
+  font-size: var(--text-sm);
+  text-align: center;
 }
 
 .one-hour-precipprob {
@@ -209,8 +213,27 @@ header {
 
 .one-day-wrapper {
   display: grid;
+  gap: var(--space-xxs);
   grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  justify-items: center;
   border-bottom: 1px solid hsla(0, 0%, 100%, 25%);
+}
+
+.one-day-wrapper:last-child {
+  border-bottom: none;
+}
+
+.one-day-label {
+  display: grid;
+  /* justify-self: start; */
+  align-items: center;
+}
+
+.one-day-icon-wrapper {
+  display: grid;
+  justify-content: center;
+  /* outline: 3px dashed lime; */
 }
 
 .sunny,
@@ -253,4 +276,10 @@ header {
 .thunder-showers-night,
 .thunder {
   background-image: url('./images/thunder.jpg');
+}
+
+@media (min-width: 340px) {
+  .logo-name {
+    font-size: 2.5rem;
+  }
 }
